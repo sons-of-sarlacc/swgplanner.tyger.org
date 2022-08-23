@@ -1,0 +1,134 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html><head>
+
+<!-- Code and graphics Copyright &copy; Steven Lang, 2004 -->
+<!-- Unauthorized use or distribution strictly forbidden -->
+<!-- Contact Tiaga on SWG Station forum for more details -->
+
+<meta http-equiv="Content-Script-Type" content="JavaScript">
+<title>SWG City Map Maker</title>
+</head>
+<body bgcolor="#939393">
+<table>
+<tr>
+<td>Structure</td>
+<td>Rank 1 (150m)</td>
+<td>Rank 2 (200m)</td>
+<td>Rank 3 (300m)</td>
+<td>Rank 4 (400m)</td>
+<td>Rank 5 (450m)</td>
+<td>Total</td>
+</tr>
+<script language="JavaScript"><!--
+
+var TK_Sizes = new Array;
+TK_Sizes = TK_Sizes.concat (150, 200, 300, 400, 450, 10000);
+
+function TK_SortFunc (arg1, arg2)
+{
+	var loc = 0;
+
+	while (arg1.length > loc && arg2.length > loc && arg1.charAt(loc) == arg2.charAt(loc)) loc++;
+	if (loc >= arg1.length && arg1.length == arg2.length) return 0;
+	if (loc >= arg1.length) return -1;
+	if (loc >= arg2.length) return 1;
+	return arg1.charCodeAt (loc) - arg2.charCodeAt (loc);
+}
+
+function TK_GetStructs ()
+{
+	if (!window.opener || !window.opener.document.options) return "";
+
+	return window.opener.document.options.fakestructurelist.value;
+}
+
+function TK_Distance (x1, y1, x2, y2)
+{
+	var x = x1 - x2;
+	var y = y1 - y2;
+	x = x * x * 64;
+	y = y * y * 64;
+	return (Math.sqrt (x + y));
+}
+
+function TK_CenterCoords (type)
+{
+	this.x = 0;
+	this.y = 0;
+	var srcimg = window.opener.document.getElementById (type + '-0');
+	if (srcimg) {
+		srcimg = srcimg.parentNode;
+		this.x = (srcimg.TK_width - 1) / 2;
+		this.y = (srcimg.TK_height - 1) / 2;
+	}
+}
+
+function TK_MakeTable ()
+{
+	var list = TK_GetStructs().split('/').sort(TK_SortFunc);
+
+	var cur = 0;
+
+	var totalc = new Array;
+	totalc = totalc.concat (0, 0, 0, 0, 0, 0);
+	var total = new Array;
+	total = totalc.concat (0, 0, 0, 0, 0, 0);
+
+	while (cur < list.length) {
+		var loop, total;
+		var entry = list[cur].split('.');
+		var type = entry[0];
+		var center = new TK_CenterCoords (type);
+		var counts = new Array;
+		counts = counts.concat (0, 0, 0, 0, 0, 0);
+
+		document.write ('<tr>');
+		document.write ('<td><img src="structures/' + type + '-0.png"></td>');
+		do {
+			entry = list[cur].split('.');
+			if (entry[0] != type) break;
+
+			entry[1] = Number (entry[1]);
+			entry[2] = Number (entry[2]);
+			entry[3] = Number (entry[3]);
+
+			var dist = (entry[3] & 1)? TK_Distance (-center.y, -center.x, entry[1], entry[2]): TK_Distance (-center.x, -center.y, entry[1], entry[2]);
+			for (loop = 0; TK_Sizes[loop] < dist; loop++);
+			counts[loop]++;
+		} while (++cur < list.length);
+
+		for (loop = 0; loop < 5; loop++)
+			counts[5] += counts[loop];
+
+		for (loop = 0; loop < 6; loop++)
+			document.write ('<td>' + counts[loop] + '</td>');
+
+		if (type.charAt(0) == 'c') {
+			for (loop = 0; loop < 6; loop++)
+				totalc[loop] += counts[loop];
+		} else {
+			for (loop = 0; loop < 6; loop++)
+				total[loop] += counts[loop];
+		}
+
+		document.write ('</tr>');
+	}
+
+	document.write ('<tr><td>Civic</td>');
+	for (loop = 0; loop < 6; loop++)
+		document.write ('<td>' + totalc[loop] + '</td>');
+	document.write ('</tr><tr><td>Private</td>');
+	for (loop = 0; loop < 6; loop++)
+		document.write ('<td>' + total[loop] + '</td>');
+	document.write ('</tr><tr><td>Total</td>');
+	for (loop = 0; loop < 6; loop++)
+		document.write ('<td>' + (totalc[loop] + total[loop]) + '</td>');
+	document.write ('</tr>');
+}
+
+TK_MakeTable ();
+// --></script>
+</table>
+<a href="javascript:window.close ();">Close Window</a>
+</body>
+</html>

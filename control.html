@@ -1,0 +1,544 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html><head>
+
+<!-- Code and graphics Copyright &copy; Steven Lang, 2004 -->
+<!-- Unauthorized use or distribution strictly forbidden -->
+<!-- Contact Tiaga on SWG Station forum for more details -->
+
+<meta http-equiv="Content-Script-Type" content="JavaScript">
+<title>SWG City Map Maker</title>
+<script language="JavaScript">
+<!--
+if (document.captureEvents) {
+	if (Event.MOUSEMOVE) {
+		document.captureEvents (Event.MOUSEMOVE);
+	}
+	if (Event.MOUSEUP) {
+		document.captureEvents (Event.MOUSEUP);
+	}
+}
+
+var Canvasframe;
+
+function TK_Canvasframe () {
+        if (Canvasframe) return Canvasframe;
+        if (parent.frames.Canvasframe) {
+                Canvasframe = parent.frames.Canvasframe;
+        } else if (parent.Canvasframe) {
+                Canvasframe = parent.Canvasframe;
+        } else {
+                return null;
+        }
+        return Canvasframe;
+}
+
+function TK_copyfilter (dst, src)
+{
+	dst.style.filter = src.style.filter;
+	dst.style.width = src.style.width;
+	dst.style.height = src.style.height;
+}
+
+function TK_AttachStructure (target) {
+	var imgUrl = 'structures/';
+	if (target == TK_Canvasframe().TK_marked) {
+		imgUrl += 'mark-';
+	}
+	imgUrl += target.TK_type + '-' + target.TK_dir + '.png';
+
+	if (target.TK_image)
+		target.removeChild (target.TK_image);
+
+	var parentimg = document.getElementById (target.TK_type + '-' + target.TK_dir);
+	if (parentimg && parentimg.tagName == 'SPAN') {
+		target.TK_image = target.ownerDocument.createElement ('SPAN');
+		target.TK_image.style.width = parentimg.style.width;
+		target.TK_image.style.height = parentimg.style.height;
+		target.TK_image.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + imgUrl + "')";
+	} else {
+		target.TK_image = target.ownerDocument.createElement ('IMG');
+		target.TK_image.setAttribute ('src', imgUrl);
+	}
+	target.appendChild (target.TK_image);
+	if (target.ownerDocument != document) {
+		target.onmouseout = TK_Canvasframe().tt_Hide;
+		TK_Canvasframe().document.TK_NeedTTUpdate = true;
+	}
+	TK_Canvasframe().TK_SetImageEvents (target.TK_image);
+}
+
+function TK_ShowHide () {
+	var hideCheck = document.getElementById ('hidecheck');
+	var optionDiv = document.getElementById ('optionform');
+	var locDiv = document.getElementById ('location');
+	if (hideCheck.checked) {
+		optionDiv.style.overflow = 'visible';
+		locDiv.style.overflow = 'hidden';
+	} else {
+		optionDiv.style.overflow = 'hidden';
+		locDiv.style.overflow = 'visible';
+	}
+}
+
+function TK_SetColorOnly (textfield) {
+	var newColor = textfield.value;
+	var newTextColor = '#ffffff';
+	if ((Number ('0x' + newColor.substr (1,2)) + Number ('0x' + newColor.substr (3,2)) + Number ('0x' + newColor.substr (5,2))) / 3 > 127) {
+		newTextColor = '#000000';
+	}
+	textfield.style.backgroundColor = newColor;
+	textfield.style.color = newTextColor;
+}
+
+function TK_SetColor (textfield) {
+	TK_SetColorOnly (textfield);
+	eval ('document.options.' + textfield.name + 'check.checked = true;');
+}
+
+function TK_MapSave () {
+	//var newWindow = window.open ('mapsave.html','TKMapSave','width=300,height=100,top=0,left=0,resizable=1,location=0,menubar=0,scrollbars=0,status=0,toolbar=0');
+	var newWindow = window.open ('mapsave.html','TKMapSave','width=300,height=100,resizable=1,location=0,menubar=0,scrollbars=0,status=0,toolbar=0');
+	if (newWindow.focus) newWindow.focus ();
+}
+
+function TK_Statistics () {
+	var newWindow = window.open ('statistics.html','TKMapStats','width=600,height=600,resizable=1,location=0,menubar=0,status=0,toolbar=0');
+	if (newWindow.focus) newWindow.focus ();
+}
+
+function TK_PickColor (textfield) {
+	document.TK_colorPicking = textfield;
+	//window.MWJ_colPick = window.open('colorpicker.html','MWJcolPick','width=188,height=169,top=0,left=0,resizable=1,location=0,menubar=0,scrollbars=0,status=0,toolbar=0');
+	window.MWJ_colPick = window.open('colorpicker.html','MWJcolPick','width=188,height=169,resizable=1,location=0,menubar=0,scrollbars=0,status=0,toolbar=0');
+	if( window.MWJ_colPick.focus ) { window.MWJ_colPick.focus(); }
+}
+
+function colPickerReturn( returnValue ) {
+        //this function will be called when the user finishes picking a colour
+        window.MWJ_colPick.close(); //you might want to close the colour picker
+	window.MWJ_colPick = null;
+	document.TK_colorPicking.value = returnValue;
+	TK_SetColor (document.TK_colorPicking);
+}
+
+function TK_UrlAppend (url, name, value, defaultVal) {
+	if (!value || value == defaultVal) return url;
+	url += url.indexOf ('?') >= 0? '&': '?';
+	url += name + '=' + value;
+	return url;
+}
+
+function TK_LinkMap () {
+	var url = "view.html";
+
+	url = TK_UrlAppend (url, 'mapwidth', TK_Canvasframe().TK_MapWidth, 113);
+	url = TK_UrlAppend (url, 'mapheight', TK_Canvasframe().TK_MapHeight, 113);
+	url = TK_UrlAppend (url, 'centerx', document.citycenter.centerx.value, 0);
+	url = TK_UrlAppend (url, 'centery', document.citycenter.centery.value, 0);
+	url = TK_UrlAppend (url, 'mapdata', escape (document.options.fakestructurelist.value), '');
+
+	var newwindow = window.open(url,'MapView','width=800,height=600,resizable=1,location=1,menubar=1,scrollbars=1,status=0,toolbar=0');
+	if( newwindow.focus ) { newwindow.focus(); }
+}
+
+function TK_BookMarkMap () {
+	var url = parent.window.location.href;
+	if (url.indexOf ('?') >= 0)
+		url = url.substr (0,url.indexOf ('?'));
+
+	url = TK_UrlAppend (url, 'mapwidth', TK_Canvasframe().TK_MapWidth, 113);
+	url = TK_UrlAppend (url, 'mapheight', TK_Canvasframe().TK_MapHeight, 113);
+	url = TK_UrlAppend (url, 'centerx', document.citycenter.centerx.value, 0);
+	url = TK_UrlAppend (url, 'centery', document.citycenter.centery.value, 0);
+	url = TK_UrlAppend (url, 'mapdata', escape (document.options.fakestructurelist.value), '');
+
+	if (navigator.appName == 'Microsoft Internet Explorer' && parseInt (navigator.appVersion) >= 4) {
+		window.external.AddFavorite (url, 'SWG City Planner Map');
+	} else {
+		alert ("This option is not available for your browser.\nHowever, you are being redirected to a URL you can bookmark yourself.");
+		parent.location.replace (url);
+	}
+}
+
+function TK_InfoOptions () {
+	alert ("Select to display more options");
+}
+
+function TK_InfoDoorColor () {
+	alert ("Color to display building doors in");
+}
+
+function TK_InfoHouseColor () {
+	alert ("Color to display houses in");
+}
+
+function TK_InfoFootprintColor () {
+	alert ("Color to display building footprints (if any) in");
+}
+
+function TK_InfoFormat () {
+	alert ("File format to generate the map image in");
+}
+
+function TK_InfoFootprints () {
+	alert ("Select to draw the area the building uses on the map");
+}
+
+function TK_InfoMapData () {
+	alert ("The data that holds the information for this map\nCopy this out and save it, then paste it in later to load the map again");
+}
+
+function TK_InfoFilename () {
+	alert ("Setting the filename will cause your browser to prompt you for a location to save to\nSome browsers may not be able to save the generated image any other way");
+}
+
+function TK_InfoBackground () {
+	alert ("Select this option to fill the background, deselect it to leave the background transparent\nIf a background is selected, enter the fill color");
+}
+
+function TK_InfoCityCenter () {
+	alert ('If you enter the coordinates of the center of your city into this box,\nthe displayed coordinates will reflect the in-game coordinates under the mouse pointer.\nTo find the city center, go to the City management Terminal, select City Info from the radial menu\nthen select Status Report.  The city center is listed as "Location: X, Y".\nEnter the X value into the first box, and Y value into the second box.');
+}
+
+function TK_InfoSize () {
+	alert ('The width and height control the size of the canvas in 8m squares.  Minimum of 10, maximum of 150.\nA normal full sized map is a width and height of 113.  Some sizes useful for different city ranks.\nRank 1: 39, 39\nRank 2: 51, 51\nRank 3: 75, 75\nRank 4: 103, 103\nRank 5: 113, 113');
+}
+
+function TK_ValidateSize (changed) {
+	var widthM, heightM;
+	var newWidth = parseInt (document.options.width.value);
+	var newHeight = parseInt (document.options.height.value);
+
+	widthM = document.options.width.value;
+	if (!widthM) widthM = document.options.width.defaultValue;
+	heightM = document.options.height.value;
+	if (!heightM) heightM = document.options.height.defaultValue;
+	
+	widthM = Number (widthM);
+	heightM = Number (heightM);
+
+	var label;
+
+	if (widthM.toString() != 'NaN' && TK_Canvasframe().TK_MapWidth != widthM && widthM >= 10 && widthM <= 150) {
+		changed = true;
+		TK_Canvasframe().TK_MapWidth = widthM;
+		widthM *= 8;
+		label = document.getElementById ('widthlabel');
+		if (label.TK_text)
+			label.removeChild (label.TK_text);
+		label.TK_text = document.createTextNode (widthM + 'm');
+		label.appendChild (label.TK_text);
+	}
+
+	if (heightM.toString() != 'NaN' && TK_Canvasframe().TK_MapHeight != heightM && heightM >= 10 && heightM <= 150) {
+		changed = true;
+		TK_Canvasframe().TK_MapHeight = heightM;
+		heightM *= 8;
+		label = document.getElementById ('heightlabel');
+		if (label.TK_text)
+			label.removeChild (label.TK_text);
+		label.TK_text = document.createTextNode (heightM + 'm');
+		label.appendChild (label.TK_text);
+	}
+
+	document.options.width.value = TK_Canvasframe().TK_MapWidth;
+	document.options.height.value = TK_Canvasframe().TK_MapHeight;
+	if (changed) TK_Canvasframe().TK_GenerateFromForm ();
+}
+
+function TK_TTOPTS (elem, width, height, clickable) {
+	elem.T_DELAY = 1000;
+	elem.T_TITLE = elem.alt;
+	elem.T_SHADOWCOLOR = '#7f7f7f';
+	elem.T_WIDTH = height * 24 + width * 12 + 8;
+	elem.T_BGCOLOR = '#939393';
+	elem.T_BORDERPUSH = true;
+	elem.T_CENTER = true;
+	elem.TK_width = width;
+	elem.TK_height = height;
+	if (clickable) {
+		elem.T_STATICCLICK = true;
+	} else {
+		elem.T_STATIC = true;
+	}
+// So a tooltip isn't really displayed by the browser
+	elem.TK_name = elem.alt;
+	if (!elem.TK_name)
+	{
+		var loop;
+		for (loop = 0; loop < elem.childNodes.length; loop++) {
+			if (elem.childNodes[loop].alt) {
+				elem.TK_name = elem.childNodes[loop].alt;
+			}
+		}
+		elem.T_TITLE = elem.TK_name;
+	}
+}
+
+function TK_TT (elem, width, height, top, right, bottom, left) {
+	var loop = 0;
+	while ((!elem.name || !elem.alt) && loop < elem.childNodes.length)
+	{
+		if (!elem.name && elem.childNodes[loop].name)
+			elem.name = elem.childNodes[loop].name;
+		if (!elem.alt && elem.childNodes[loop].alt)
+			elem.alt = elem.childNodes[loop].alt;
+	}
+	var elemalt = elem.alt;
+	elem.TK_SC_top = top;
+	elem.TK_SC_right = right;
+	elem.TK_SC_bottom = bottom;
+	elem.TK_SC_left = left;
+	TK_TTOPTS (elem, width, height, true);
+	return (TK_ToolBarImageString (width, height, elem.name, elemalt, 3, 0, top, right, bottom, left) +
+		TK_ToolBarImageString (width, height, elem.name, elemalt, 2, 0, top, right, bottom, left) +
+		TK_ToolBarImageString (width, height, elem.name, elemalt, 1, 0, top, right, bottom, left));
+}
+
+// The controls are laid out according to the following map.
+// mapwidth=67&mapheight=13&mapdata=gg.-33.-1.0/tp.-33.-6.0/gl1.-26.1.0/mt.-26.-1.0/gl2.-19.2.0/gs1.-23.-2.0/gs2.-23.-6.0/gm1.-14.-6.0/nm1.-14.-2.0/ns1.-20.-2.0/ns2.-20.-6.0/tl1.-12.2.0/ts1.-17.-2.0/ts2.-17.-6.0/tm1.-11.-3.0/fe.-9.-6.0/fc.-6.-3.0/ff.-6.-6.0/nl1.-5.1.0/fs.-3.-6.0/ch.2.-2.0/cg2.5.-6.0/cg1.2.-6.0/cl.9.2.0/cg3.9.-6.0/cg4.14.-6.0/ct.24.1.0/cb.10.-1.0/cc.26.-7.0/cm.21.-6.0/cs.14.2.0/cs.19.2.0
+
+window.useWindow = parent;
+
+-->
+</script>
+<script src="locvar.js" type="text/javascript" language="javascript1.2"></script>
+</head>
+<body bgcolor="#939393">
+<table width=792 border=0 frame=void cellspacing=0 cellpadding=0>
+<tr height=12><td width=1></td>
+<script language="JavaScript"><!--
+var count = 0;
+function TK_ToolBarImageString (width, height, type, name, dir, tooltip, imagett, top, right, bottom, left)
+{
+	var ttext = '';
+	var imgwidth = ((dir & 1)? height: width) * 12;
+	var imgheight = ((dir & 1)? width: height) * 12;
+	if (tooltip && imagett)
+	{
+		ttext = 'return escape(TK_TT(this,' + width + ',' + height + 
+			',' + top + ',' + right + ',' + bottom + ',' + left + '));';
+	} else if (tooltip) {
+		ttext = "var ttext = this.alt; TK_TTOPTS (this, 7, 0, false); return escape('');";
+	}
+	if (ttext) ttext = ' onmouseover="' + ttext + '"';
+
+	var onclick = 'onclick="TK_Canvasframe().TK_Generate(arguments[0],this,\'' + type + '\',' + dir + ',' + width * 6 + ',' + height * 6 + ',' + Math.max(width, height) * 12 + ',' + Math.max (width,height) * 12 + '); return false;"' + ttext;
+
+	return ('<span style="width:' + imgwidth + 'px;height:' + imgheight +
+		';filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'structures/' + type + '-' + dir + '.png\');" ' + onclick + '>' +
+		'<img style="filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);" border=0 width=' + imgwidth + ' height=' + imgheight + ' id="' + type + '-' + dir + '" name=' + type +
+		' src="structures/' + type + '-' + dir + '.png" alt="' + name +
+		'"></span>');
+}
+
+function TK_ToolBarImage (width, height, type, name)
+{
+	document.write ('<td width=' + width * 12 + ' height=' + height * 12 +
+		' colspan=' + width + ' rowspan=' + height + '>' +
+		TK_ToolBarImageString (width, height, type, name, 0, 1, 1, 0, 0, 0, 0) + '</td>');
+}
+// Special case, pass top, left, bottom, right offsets to be applied to graphics who's footprints were corrected.
+function TK_ToolBarImageSC (width, height, type, name, top, left, bottom, right)
+{
+	document.write ('<td width=' + width * 12 + ' height=' + height * 12 +
+		' colspan=' + width + ' rowspan=' + height + '>' +
+		TK_ToolBarImageString (width, height, type, name, 0, 1, 1, top, right, bottom, left) + '</td>');
+}
+function TK_ToolBarImageNoTT (width, height, type, name)
+{
+	document.write ('<td width=' + width * 12 + ' height=' + height * 12 +
+		' colspan=' + width + ' rowspan=' + height + '>' +
+		TK_ToolBarImageString (width, height, type, name, 0, 0, 0) + '</td>');
+}
+function TK_ToolBarImageNoRotate (width, height, type, name)
+{
+	document.write ('<td width=' + width * 12 + ' height=' + height * 12 +
+		' colspan=' + width + ' rowspan=' + height + '>' +
+		TK_ToolBarImageString (width, height, type, name, 0, 1, 0) + '</td>');
+}
+function TK_ToolBarSpacer (width, height)
+{
+	document.write ('<td width=' + width * 12 + ' height=' + height * 12 +
+		' colspan=' + width + ' rowspan=' + height + '></td>');
+}
+function TK_ToolBarNextRow ()
+{
+	document.write ('</tr><tr height=12><td width=1>');
+}
+
+TK_ToolBarImage (9, 5, 'tp', 'Tatooine PA Hall');
+TK_ToolBarSpacer (1, 5);
+TK_ToolBarImage (3, 4, 'gs1', 'Small Generic/Corellia, Style 1');
+TK_ToolBarImage (3, 4, 'ns1', 'Small Naboo, Style 1');
+TK_ToolBarImage (3, 4, 'ts1', 'Small Tatooine, Style 1');
+TK_ToolBarImage (3, 4, 'gm1', 'Medium Generic/Corellia, Style 1');
+TK_ToolBarSpacer (2, 3);
+TK_ToolBarImageNoRotate (3, 3, 'ff', 'Equipment Factory');
+TK_ToolBarImageNoRotate (3, 3, 'fc', 'Clothes/Armor Factory');
+TK_ToolBarImage (5, 5, 'fs', 'Structure Factory');
+TK_ToolBarImageNoRotate (3, 3, 'cg1', 'Small Garden');
+// TK_ToolBarImageNoRotate (4, 4, 'cg2', 'Garden');
+TK_ToolBarSpacer (4, 4);
+TK_ToolBarImageNoRotate (5, 5, 'cg3', 'Medium Garden');
+TK_ToolBarImageNoRotate (7, 7, 'cg4', 'Large Garden');
+TK_ToolBarImage (5, 6, 'ct', 'City Theater');
+TK_ToolBarImage (7, 7, 'cc', 'City Cantina');
+
+TK_ToolBarNextRow ();
+
+TK_ToolBarNextRow ();
+
+TK_ToolBarNextRow ();
+
+TK_ToolBarImage (5, 5, 'tm1', 'Medium Tatooine, Style 1');
+TK_ToolBarImageNoRotate (3, 3, 'fe', 'Food/Chemical Factory');
+TK_ToolBarSpacer (3, 1);
+
+TK_ToolBarNextRow ();
+
+TK_ToolBarImage (3, 4, 'gs2', 'Small Generic/Corellia, Style 2');
+TK_ToolBarImage (3, 4, 'ns2', 'Small Naboo, Style 2');
+TK_ToolBarImage (3, 4, 'ts2', 'Small Tatooine, Style 2');
+TK_ToolBarImage (3, 4, 'nm1', 'Medium Naboo, Style 1');
+TK_ToolBarImage (7, 9, 'ch', 'City Hall');
+
+TK_ToolBarNextRow ();
+
+TK_ToolBarImage (7, 8, 'gg', 'Generic/Corellia/Naboo PA Hall');
+TK_ToolBarImage (3, 3, 'mt', 'Merchant Tent');
+TK_ToolBarSpacer (5, 1);
+TK_ToolBarImageNoRotate (3, 3, 'cb', 'City Bank');
+TK_ToolBarSpacer (2, 3);
+
+TK_ToolBarNextRow ();
+
+TK_ToolBarSpacer (8, 1);
+TK_ToolBarSpacer (5, 1);
+
+TK_ToolBarNextRow ();
+
+TK_ToolBarSpacer (1, 1);
+TK_ToolBarImage (7, 6, 'nl1', 'Large Naboo, Style 1');
+TK_ToolBarSpacer (19, 1);
+
+TK_ToolBarNextRow ();
+
+TK_ToolBarImageSC (7, 5, 'gl1', 'Large Generic/Corellia, Style 1', 1, 0, 0, 0);
+TK_ToolBarImage (7, 5, 'gl2', 'Large Generic/Corellia, Style 2');
+TK_ToolBarImage (7, 5, 'tl1', 'Large Tatooine, Style 1');
+TK_ToolBarImage (5, 5, 'cl', 'City Cloning Lab');
+TK_ToolBarImage (5, 5, 'cs', 'City Shuttleport');
+TK_ToolBarImage (5, 5, 'cp', 'City Parking Garage');
+TK_ToolBarImage (5, 5, 'cm', 'City Med Center');
+TK_ToolBarSpacer (4, 5);
+
+TK_ToolBarNextRow ();
+TK_ToolBarNextRow ();
+TK_ToolBarNextRow ();
+TK_ToolBarNextRow ();
+TK_ToolBarNextRow ();
+--></script>
+<td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td><td width=12></td>
+</tr>
+</table>
+
+<div style="width: 918px">
+<div id="optionform" style="width: 480px; height: 48px; overflow:hidden; float: left;">
+<form name="options" action="/cgi-bin/mapmaker" method="post" target="_new">
+<table width=906 border=0 frame=void cellspacing=0 cellpadding=0>
+<tr height=48>
+<td width=48><a href="tips.html" target="_new"><img border=0 src="graphics/help.png" alt="Mapping Tips" onmouseover="this.src='graphics/helpoutline.png';" onmouseout="this.src='graphics/help.png';"></a></td>
+<td width=48><img border=0 src="graphics/normal.png" alt="Destroy" onmouseover="this.src='graphics/destroy.png';" onmouseout="this.src='graphics/normal.png';" onclick="TK_Canvasframe().TK_Destroy(false);"></td>
+<td width=48><img border=0 src="graphics/rotate.png" alt="Rotate right" onmouseover="this.src='graphics/rotateoutline.png';" onmouseout="this.src='graphics/rotate.png';" onclick="TK_Canvasframe().TK_Rotate(1, true);"></td>
+<td width=12></td>
+<td width=120><input type="submit" value="Preview Map"></td>
+<td width=120><input type="button" value="Save Map" onclick="TK_MapSave();"></td>
+<td width=120>
+<a href="javascript:TK_InfoOptions();">Options</a>
+<input id="hidecheck" name="fulloptions" type=checkbox onclick="TK_ShowHide();">
+</td>
+<td width=240><a href="javascript:TK_BookMarkMap();">Bookmark</a> or <a href="javascript:TK_LinkMap();">link</a> this map</td>
+<td width=150><a href="javascript:TK_Statistics();">Statistics</a></td>
+<input type=hidden name="fakestructurelist" value="" id="fakestructurelist">
+<input type=hidden name="structurelist" value="" id="structurelist">
+</tr>
+</table>
+<table width=712 border=0 frame=void cellspacing=0 cellpadding=0>
+<tr height=24>
+<td width=48></td>
+<td width=24><input type=checkbox checked name="doorcolorcheck" value=1></td>
+<td width=64>Doors</td>
+<td width=120><input type=text onchange="TK_SetColor (this);" name="doorcolor" value="#004080"></td>
+<td width=64><a href="javascript:TK_PickColor (document.options.doorcolor);">Pick color</a></td>
+<td width=48></td>
+<td width=24><input type=checkbox checked name="housecolorcheck" value=1></td>
+<td width=64>Structures</td>
+<td width=120><input type=text onchange="TK_SetColor (this);" name="housecolor" value="#3fa94d"></td>
+<td width=64><a href="javascript:TK_PickColor (document.options.housecolor);">Pick color</a></td>
+</tr>
+<tr height=24>
+<td width=48></td>
+<td width=24><input type=checkbox checked name="footprintcolorcheck" value=1></td>
+<td width=64>Footprints</td>
+<td width=120><input type=text onchange="TK_SetColor (this);" name="footprintcolor" value="#353535"></td>
+<td width=64><a href="javascript:TK_PickColor (document.options.footprintcolor);">Pick color</a></td>
+<td width=48></td>
+<td width=24><input type=checkbox name="backgroundcolorcheck" value=1></td>
+<td width=64>Background</td>
+<td width=120><input type=text onchange="TK_SetColor (this);" name="backgroundcolor" value="#08341c"></td>
+<td width=64><a href="javascript:TK_PickColor (document.options.backgroundcolor);">Pick color</a></td>
+</tr>
+<tr height=24>
+<td width=48></td>
+<td width=88 colspan=2><a href="javascript:TK_InfoSize();">Width</a></td>
+<td width=120><input type=text onchange="TK_ValidateSize (false);" name="width" value="113"></td>
+<td width=64 id="widthlabel"></td>
+<td width=48></td>
+<td width=88 colspan=2><a href="javascript:TK_InfoSize();">Height</a></td>
+<td width=120><input type=text onchange="TK_ValidateSize (false);" name="height" value="113"></td>
+<td width=64 id="heightlabel"></td>
+</tr>
+</table>
+</form>
+</div>
+<div id='location' style='width: 438px; height: 1px; overflow: visible; float: right;'>
+<table width=414 border=0 frame=void cellspacing=0 cellpadding=0>
+<tr height=48><td width=414>
+<form name="citycenter"><a href="javascript:TK_InfoCityCenter();">City center</a>
+<input name="centerx" type="text" style="width:4em;" value="0">
+<input name="centery" type="text" style="width:4em;" value="0">
+<span id="positionlabel" style="padding-left: 16px;"></span>
+</td></tr></table></div>
+</div>
+<script language="JavaScript">
+<!--
+document.citycenter.TK_poslabel = document.getElementById ('positionlabel');
+document.citycenter.TK_poslabel.TK_text = document.createTextNode ('0 0');
+document.citycenter.TK_poslabel.appendChild (document.citycenter.TK_poslabel.TK_text);
+
+TK_SetColorOnly (document.options.backgroundcolor);
+TK_SetColorOnly (document.options.footprintcolor);
+TK_SetColorOnly (document.options.doorcolor);
+TK_SetColorOnly (document.options.housecolor);
+
+if (parent.document.mapdata) document.options.fakestructurelist.value = parent.document.mapdata.replace (/ /g, '+');
+if (parent.document.mapwidth) document.options.width.value = parseInt (unescape (parent.document.mapwidth));
+if (parent.document.mapheight) document.options.height.value = parseInt (unescape (parent.document.mapheight));
+if (parent.document.centerx) document.citycenter.centerx.value = parseInt (unescape (parent.document.centerx));
+if (parent.document.centery) document.citycenter.centery.value = parseInt (unescape (parent.document.centery));
+var TK_OnLoadFinished = false;
+function TK_LoadDone () {
+	if (TK_OnLoadFinished || !TK_Canvasframe().TK_GenerateFromForm)
+		return;
+
+	TK_ShowHide ();
+	TK_ValidateSize (true);
+	TK_OnLoadFinished = true;
+}
+--></script>
+<script src="wz_tooltip.js" type="text/javascript" language="javascript1.2"></script>
+<script language="JavaScript"><!--
+setTimeout ('TK_LoadDone ();', 100);
+--></script>
+</body></html>

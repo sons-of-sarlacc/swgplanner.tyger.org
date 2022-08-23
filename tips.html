@@ -1,0 +1,237 @@
+<html><head>
+<title>SWG City Planning Tips and Tricks</title>
+
+<!-- Code and graphics Copyright &copy; Steven Lang, 2004 -->
+<!-- Unauthorized use or distribution strictly forbidden -->
+<!-- Contact Tiaga on SWG Station forum for more details -->
+
+<link rel="stylesheet" href="tutorial/style.css" type="text/css">
+</head>
+<body>
+<div class="head">
+<h1>City Planning Tips and Tricks</h1>
+<h2><a name="toc">Contents</a></h2>
+
+<ul class="toc">
+<li class="tocline1"><a class="tocxref" href="#a1">1 About the SWG City Planning Tool</a>
+<ul class="toc">
+<li class="tocline2"><a class="tocxref" href="#a11">1.1 Overview</a>
+<li class="tocline2"><a class="tocxref" href="#a12">1.2 Requirements</a>
+<li class="tocline2"><a class="tocxref" href="#a13">1.3 Where to Find It</a>
+</ul>
+<li class="tocline1"><a class="tocxref" href="#2">2 Basic Usage</a>
+<ul class="toc">
+<li class="tocline2"><a class="tocxref" href="#a21">2.1 Interface</a>
+<li class="tocline2"><a class="tocxref" href="#a22">2.2 Placing Structures</a>
+<li class="tocline2"><a class="tocxref" href="#a23">2.3 Manipulating a Placed Structure</a>
+</ul>
+<li class="tocline1"><a class="tocxref" href="#a3">3 Saving Your Work</a>
+<ul class="toc">
+<li class="tocline2"><a class="tocxref" href="#a31">3.1 Saving the Layout</a>
+<li class="tocline2"><a class="tocxref" href="#a32">3.2 Creating a Map</a>
+<li class="tocline2"><a class="tocxref" href="#a33">3.3 Customizing the Map Appearance</a>
+<li class="tocline2"><a class="tocxref" href="#a34">3.4 Other Options</a>
+</ul>
+<li class="tocline1"><a class="tocxref" href="#a4">4 A Simple Cartography Tutorial</a>
+<ul class="toc">
+<li class="tocline2"><a class="tocxref" href="#a41">4.1 Introduction</a>
+<li class="tocline2"><a class="tocxref" href="#a42">4.2 What You Will Need</a>
+<li class="tocline2"><a class="tocxref" href="#a43">4.3 Placing the Houses</a>
+<li class="tocline2"><a class="tocxref" href="#a44">4.4 A Quick and Dirty Introduction</a>
+<li class="tocline2"><a class="tocxref" href="#a45">4.5 Exporting the Map</a>
+<li class="tocline2"><a class="tocxref" href="#a46">4.6 Starting Your Final Map</a>
+<li class="tocline2"><a class="tocxref" href="#a47">4.7 Importing the Maps Into The Gimp</a>
+<li class="tocline2"><a class="tocxref" href="#a48">4.8 Adding a Grid</a>
+<li class="tocline2"><a class="tocxref" href="#a49">4.9 Adding Terrain</a>
+<li class="tocline2"><a class="tocxref" href="#a410">4.10 Finishing Touches</a>
+<li class="tocline2"><a class="tocxref" href="#a411">4.11 Creating Different Looks</a>
+</ul>
+</ul>
+
+<h2><a class="section" name="a1">1 About the SWG City Planning Tool</a></h2>
+<h3><a class="section" name="a11">1.1 Overview</a></h3>
+
+<P>People have come up with creative ways to plan their cities.  Some have used excel spreadsheets, some have used programs like Visio.  Some have used napkins at the local diner.  And some, like myself, have used a graphics manipulation program to actually represent what the structures look like.</P>
+<P>Each method had it's advantages and disadvantages.  Some were quick and rough.  Some were a little more complex, but more accurate.  And some were very time consuming, but also produced nice looking maps.  They all had tradeoffs.  I had personally been using the graphics method, and had been building up quite a repository of representations of the houses.  First, Naboo and Generic, for the city I live in on Naboo.  Then Tatooine for a city I helped map out on Dantooine.</P>
+<P>I was getting fairly good at putting structures on the map.  However, it was still a difficult process.  If there was a way I could just drag structures from the palette to the map, it would be so much easier.  Then I remembered a web puzzle I saw years ago that, entirely in JavaScript, presented pieces of a graphic to you, and you could drag them around the page.  So I learned how it worked, and started working on my own version of it, using the structure palette and a grid.  It quickly grew from there to what you can use now.</P>
+<P>Easier than any of the other methods of planning a city, and useful to make good looking maps.  I have successfully combined the best parts of all the different city planning methods.</P>
+
+<h3><a class="section" name="a12">1.2 Requirements</a></h3>
+
+<P>To be able to use this tool, you will need a fairly modern browser that understands JavaScript and CSS.  I have personally tested Mozilla 1.0 and later and IE 6.  Konqueror (my browser of choice) unfortunately does not work.  I have heard that Opera 7 works as well.</P>
+
+<h3><a class="section" name="a13">1.3 Where to Find It</a></h3>
+
+<P>The city planner is located conveniently <a href=http://swgplanner.tyger.org>a click away</a>.</P>
+
+<h2><a class="section" name="a2">2 Basic Usage</a></h2>
+<h3><a class="section" name="a21">2.1 Interface</a></h3>
+
+<P>When you load the page, you are presented with two panes.  In the top is a palette with a representation of all the non factioned player structures in the game.  Below the palette are three tools, buttons to save the map, and a check-box to show more options.  The three tools are, in order, the help tool (This page), the wrecking ball tool, and the destroy tool.  Hovering the mouse over one of the structures will produce a tool-tip similar to the following.</P>
+<div style='width: 137; padding-left: 3; background-color: #003399;'><font style='color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 11px;'><b>Small Generic/Corellia, Style 1</b></font></div>
+<div style='width: 132; padding: 3; background-color: #939393; border: #003399 1px solid; overflow: hidden;'><img width=48 height=36 border=0 src='structures/gs1-3.png'><img width=36 height=48 border=0 src='structures/gs1-2.png'><img width=48 height=36 border=0 src='structures/gs1-1.png'></div>
+<P>Clicking on any structure, either in the palette or one of the alternate orientations shown in the tool-tip, will create a structure of that type for you to place.  Using the tool-tip allows you to create a structure already facing a different orientation.</P>
+<P>When a structure is selected in the lower pane, the wrecking ball tool will destroy it, and the rotate tool will rotate it clockwise.  The currently selected structure is marked as in the following example.</P>
+<P>The City Center input fields allow you to input the coordinates of your city.  Once you do this, the coordinates under the mouse pointer will be displayed, accurately reflecting the coordinates of that spot in the game.  To find the coordinates of your city, enter your city hall and find the city management terminal.  On the city management terminal, select City Info on the radial menu, and Status Report from that menu.  Find the line that says "Location:" followed by two numbers.  Enter the numbers in the same order into the City Center boxes.</P>
+<P>The rest of the controls will be explained later.</P>
+<table border=0 cellspacing=0 cellpadding=0><tr>
+<td style='width: 100; text-align: center;'>Unselected<BR><img width=36 height=48 border=0; src='structures/gs1-0.png'></td>
+<td style='width: 100; text-align: center;'>Selected<BR><img width=36 height=48 border=0; src='structures/mark-gs1-0.png'></td>
+</tr></table>
+
+<h3><a class="section" name="a22">2.2 Placing Structures</a></h3>
+
+<P>To place a structure on the canvas, click on the desired structure from the palette, or from a tool-tip in the palette.  This will create a new structure for you to place.  Simply move this structure to the canvas and click again to place it when you have it in position.  As you move the structure around, it will automatically snap into the check grid locations.  Once a structure has been placed, you can move it again by clicking on it, dragging it to where you wish it to be, and releasing the mouse button.</P>
+
+<h3><a class="section" name="a23">2.3 Manipulating a Placed Structure</a></h3>
+
+<P>In the bottom, a green checkerboard with rings on it.  This represents the canvas you will create your city layout on.  Each square is 8 meters by 8 meters, the same as each square in the structure placement view.  You can scroll this view around all you like.  In this tool, each square is 12 pixels by 12 pixels, so 3 pixels is 2 meters.  This is about the ratio of the in-game map when it is zoomed all the way out at 1280x1024.</P>
+<P>When a structure has been placed, you can click on it to bring up a tool-tip similar to the one from the palette.  It looks like the following.</P>
+<div style='width: 137; padding-left: 3; background-color: #003399;'><font style='color: #ffffff; font-family: arial,helvetica,sans-serif; font-size: 11px;'><b>Small Generic/Corellia, Style 1</b></font></div>
+<div style='width: 132; padding: 3; background-color: #939393; border: #003399 1px solid; text-align: center;'>
+<img src="graphics/normal.png" onmouseover="this.src='graphics/destroy.png';" onmouseout="this.src='graphics/normal.png';">
+<img src="graphics/normal.png" onmouseover="this.src='graphics/copyglow.png';" onmouseout="this.src='graphics/normal.png';">
+<br>
+<img width=48 height=36 border=0 src='structures/gs1-3.png'><img width=36 height=48 border=0 src='structures/gs1-2.png'><img width=48 height=36 border=0 src='structures/gs1-1.png'>
+</div>
+<P>In this tip, clicking on one of the alternate orientations will rotate the structure to that orientation.  There are also two tools in this window.  The first is the wrecking ball tool, the second is the clone tool.  They normally look the same, but when you go to click on them, they will change to indicate which tool it is.</P>
+<table border=0 cellspacing=0 cellpadding=0><tr>
+<td style='width: 100; text-align: center;'>Wrecking Ball<BR><img width=48 height=48 border=0; src='graphics/destroy.png'></td>
+<td style='width: 100; text-align: center;'>Clone<BR><img width=48 height=48 border=0; src='graphics/copyglow.png'></td>
+</tr></table>
+<P>The wrecking ball tool serves the same purpose as the tool in the upper frame.  Clicking on it will destroy the structure.  The clone tool will create a new structure of the same type and orientation.  Double-clicking on a structure will rotate the structure clockwise.</P>
+
+<h2><a class="section" name="a3">3 Saving Your Work</a></h2>
+<h3><a class="section" name="a31">3.1 Saving the Layout</a></h3>
+
+<P>So you have your layout perfect, and probably spent a good bit of time getting it that way.  You may want to come back and make changes later.  How do you save your work?  If you click on the "Options" check box, a link will appear to the right named "Bookmark this Map".  If you are using Internet Explorer, when you click on the link, you will be prompted to confirm the bookmark creation.  If you are using any other browser, you will be redirected to a new URL that you must use the bookmark option in your browser yourself to save.</P>
+
+<P>You can create a link to this URL on message boards to share the layout with others, such as this <a target=_blank href='http://swgplanner.tyger.org/?mapdata=ch+54+51+0'>map of only a city hall</a>.</P>
+
+<h3><a class="section" name="a32">3.2 Creating a Map</a></h3>
+
+<P>You can also create a graphical map from the layout.  This is just a simple graphical representation, nothing fancy.  You can see what it is like by clicking the "Preview Map" button, which will bring up the map in another window.  If you wish to save the map to a file, click on the "Save Map" button.  This will present you with a window where you can select the filename and format.  Once you have selected a filename, click on the "Save Map" button in this window and your browser will confirm the save with you, and allow you to select a location.</P>
+
+<h3><a class="section" name="a33">3.3 Customizing the Map Appearance</a></h3>
+
+<P>You may have noticed other options appear that you need to scroll down to when you selected the options check.  Specifically, there are 4 text input boxes, an accompanying check box, and a "Pick Color" link.  This controls the color of the various parts of the produced map.  These options only effect the "Preview Map" and "Save Map" view.</P>
+<UL><LI>Doors<P>The color doors will be drawn in.</P></LI>
+<LI>Structures<P>The color the main part of the structure will be drawn in.</P></LI>
+<LI>Footprints<P>The color of the land a structure occupies beyond it's walls.</P></LI>
+<LI>Background<P>The color of the background.</P></LI></UL>
+<P>Selecting the check box by one of these will cause it to be rendered.  Deselecting it will cause it not to be rendered.  In the case of the background, if it is not rendered it will be transparent.  If you know the hex color code for the color you wish to use, you can enter it into the box directly.  Otherwise, you can use the "Pick Color" link to open a new window with a simple color picker.</P>
+
+<h3><a class="section" name="a34">3.4 Other Options</a></h3>
+
+<P>The other option revealed when you select the options check is 'Map data'.  This is a textual representation of your layout.  If you copy this string out, then paste it back in later, you will restore the layout to the state it had been in when you copied it out.  Deleting everything in this input has the effect of clearing the current layout.  The reason this is visible is for legacy reasons.  There used to be no way to save the URL for later editing.  The only option was to use the map data box.  The reason this box is still present is to allow people who have a map saved this way to be able to restore it again.</P>
+
+<h2><a class="section" name="a4">4 A Simple Cartography Tutorial</a></h2>
+<h3><a class="section" name="a41">4.1 Introduction</a></h3>
+
+<P>Many people have seen the map I have made for Temenos Island, Naboo, Kettemoor.  There are two versions of it.  There is the <a target=_blank href=http://www.tyger.org/~tiger/SWG/TIMapBig.png>simple map</a> and the <a target=_blank href=http://www.tyger.org/~tiger/SWG/TIMapGrid.png>city planner map</a>.  I made these by hand originally.  Now I use the city map making tool to maintain them.  Importing the maps from the tool into the source file for those maps takes only a minute or two.  Saving the maps takes only a few seconds.  The maps are generated from the same file, with different layers visible or hidden.</P>
+<P>In this tutorial I am going to go through the steps to setting up a similar styled map.  I don't cover quite every trick I use in that map, so if you want to see what the whole thing looks like yourself, you can download the source <a href=http://www.tyger.org/~tiger/SWG/TIMap.xcf>map in xcf format</a>.</P>
+
+<h3><a class="section" name="a42">4.2 What You Will Need</a></h3>
+
+<P>If you tried downloading the source map, you've probably already noticed that you don't have any graphics programs that understand it.  The format is the native file format of <a target=_blank href=http://www.gimp.org>The Gimp</a>.  This is the program I use to edit the graphics.  It is natively a UNIX program, and is included with nearly every Linux distribution.  There is also a version for <a target=_blank href=http://www.gimp.org/~tml/gimp/win32/>Windows</a> and <a target=_blank href=http://www.macgimp.org/>MacOS X</a>.  It is a free download, and completely free software released under the GNU General Public License.  But don't let the free part fool you into thinking it isn't any good.  A variant of this program, designed to handle a more dynamic range of colors suitable for 35mm film, is used by many big movie studios including <a target=_blank href=http://www.sonypictures.com/index.html>Sony Pictures</a>, <a target=_blank href=http://www.dreamworks.com/>Dreamworks</a> and <a target=_blank href=http://www.ilm.com/>Industrial Light and Magic (ILM)</a>.  It is the same program I used to create all the graphics used in the mapping tool, and it serves as the back-end for the city planner.  When you click preview map or save map, a CGI script takes the layout and uses The Gimp to dynamically create the graphic file you download.</P>
+<P>Now that I've introduced you to The Gimp, while it is what I use, it is not required.  Any other graphics manipulation program that can work with layers, such as PhotoShop, will do.  However, you will be on your own figuring out how to duplicate what I am doing in The Gimp.</P>
+<P>That is all you will need on the graphics side of things.  In game, I recommend picking up a personal harvester if you do not have any spare deed laying around.  You will see why later.  A speeder-bike is also recommended, so you can cover the entire area of the city quickly.</P>
+
+<h3><a class="section" name="a43">4.3 Placing the Houses</a></h3>
+
+<P>For placing the houses, the ideal situation is two computers with side by side monitors, where you can work on one and be in game on the other, taking measurements and looking at the map as you place the structure.  An alternative is taking screen-shots, or using alt-tab to switch away from SWG into your web browser.  I have done it all 3 ways.</P>
+<P>The first order of business is placing the houses on your map.  For a sample, I picked a small area (144 meters by 144 meters) with a couple houses on the waterfront.  Note I am not doing a whole city, so there is no city hall or anything else.  These houses are, in fact, on the outer border of a city.  Here is a view of the in-game map of these houses.</P>
+<img width=216 height=216 src=tutorial/TUTmap.jpg>
+<P>Fairly simple.  And fairly unhelpful in figuring out the distance between the houses.  Fortunately there are three methods to figuring out distances.  The first is to pace them out.  This is made easy by the location bar attached to your radar view.  To use this, you need to measure from two points you can easily compare.  For this example, I went up to the lower house and placed myself exactly at the upper left corner on the outside.  You can see the exact location in the map above, as that is where I was when I took the screens-hot of the map.  I then went to the lower right corner of the upper house.  Here are the two locations I got.</P>
+<table><tr>
+<td width=200><img border=0 width=168 height=16 src=tutorial/TUTloc1.jpg></td>
+<td width=200><img border=0 width=168 height=16 src=tutorial/TUTloc2.jpg></td>
+</tr></table>
+<P>The first number is the east/west location, with larger numbers to the east.  The second number is the north/south location, with larger numbers to the north.  Doing a quick little batch, we find that subtracting -6627 from -6596 is 31.  If you do it the other way and get -31, just ignore the sign and use 31.  Subtracting 5484 from 5531 is 47.  Knowing that each square is 8 meters, we find that 31 / 8 is 3.875.  Looking at the small Naboo house (And really, any small house) the upper left and lower right corners are half way into the box.  This means the distance should be an even multiple of 8.  3.875 is close enough to be considered 4.  So there are 4 boxes between the two in the east/west direction.  In the north/south direction, 47 / 8 is 5.875, which is close enough to be considered 6.</P>
+<P>Now if you just go and put the houses on top of each other, then move one 6 down and 4 to the right, you will end up with something that looks like <a target=_blank href=http://swgplanner.tyger.org/?mapdata=ns1+7+10+1+ns1+3+4+1>this</a>, which doesn't quite look like the map.  The reason is the points weren't the same on both buildings.  If you recall, it was the lower right corner of the upper house and the upper left corner of the other.  So the proper starting location is <a target=_blank href=http://swgplanner.tyger.org/?mapdata=ns1+5+6+1+ns1+3+4+1>this</a> and moving it 6 down and 4 to the right from there produces <a target=_blank href=http://swgplanner.tyger.org/?mapdata=ns1+9+12+1+ns1+3+4+1>this</a>.</P>
+<P>If your head is spinning from all the numbers, fear not, there is an alternative for the numerically challenged.  Remember that personal harvester I recommended you getting?  Now is the time to use it.  Select "Use Deed" to enter the structure placement view.  Be careful not to actually click anywhere, you do not want to actually place it.  You can press your escape (Esc) key to leave the placement view without placing the harvester.  Standing between the two houses, I get the following view.</P>
+<img border=0 width=256 height=205 src=tutorial/TUTsp1.jpg>
+<P>The personal harvester is of course 8 meters by 8 meters, or 1 square, marked by the green square.  Use the green square to your advantage.  You can use it to count the boxes between structures.  In this case, I placed it between the two structures.  In the north/south direction, the space between the harvester and the houses appears twice the size of the harvester square.  That would make it 2 squares, so 5 squares between the footprints for the houses.  In the east/west direction, the harvester appears to be right behind the footprint of the lower house.  It is not right up against the footprint of the upper house, it looks more like a box of space there.  That means 2 boxes between the footprints of the two houses.  Looking back at <a target=_blank href=http://swgplanner.tyger.org/?mapdata=ns1+9+12+1+ns1+3+4+1>the previous layout</a> this agrees with the number crunching method.</P>
+<P>There is an even easier third method.  If you have entered the center of your city into the Cety Center input, the coordinates listed will be accurate.  You can use these to place houses.  The easiest way would be to run up to a house, get the coordinates, and place the house on the map so that placing the mouse cursor in the same spot gets coordinates within a few meters of what you recorded.</P>
+<P>For the small round house behind the upper house, I use another method.  I make a best guess.  That gives me <a target=_blank href=http://swgplanner.tyger.org/?mapdata=ns1+9+12+1+ns1+3+4+1+ns2+-1+4+2>this</a> layout.</P>
+
+<h3><a class="section" name="a44">4.4 A Quick and Dirty Introduction</a></h3>
+
+<P>Before going on, I'm going to go on a quick sidetrack and give a brief introduction to The Gimp.  I recommend spending a little time using it to familiarize yourself with the controls.</P>
+<P>When you first start The Gimp, you are presented with a few windows.  The main window has a bunch of tools, menus labelled "File" "Xtns" and "Help", and two colors.  A few other windows also opened at the same time.  You can go ahead and close them if you wish.  You will not be using these windows.  However, you will be using a different window that is not open.  This is the "Layers, Channels & Paths" window.  I will be referring to it as the Layers window.  You can open this window by selecting the "File" menu, the "Dialogs" sub menu, and the "Layers, Channels & Paths" option, or press Ctrl-L in the main window.</P>
+<P>Load a graphic into The Gimp.  It does not matter what at this point, just something to experiment with.  When you do this, it will bring up a window.  You will see a small version of it appear in the layers window.  If the graphic you loaded is rather large, The Gimp scaled the view down to 50% or smaller scale.  You can see this by looking at the title of the window.  It will have the filename, the color space (RGB or indexed) and the scale.  You can change the scale by pressing + or -, or you can go to 100% by pressing 1.  If you wish to resize the window to fit the new size, you can press ctrl-E.</P>
+<P>To change the current color, you can double-click on one of the color boxes in the main window.  This will bring up a color picker, allowing you to choose the color.  Clicking the arrow between the boxes will swap the foreground (The upper-left box) and background (The lower-right box) colors.  You can pick a color from the image using the color-picker tool.  This is the tool who's graphic looks like an eye-dropper.  You can also select that tool by pressing the letter O in the graphics view window.</P>
+<P>That should be enough for what you will be doing in this tutorial.  There are other tasks, but I will include a short description of what to do for them.  You can bring up context menus by right clicking in the view windows or the layers window.  Go ahead and try a few things to familiarize yourself with the controls.  You can also try following along on a few of the <a target=_blank href=http://www.gimp.org/tutorials.html>tutorials</a> at The Gimp web-page.</P>
+
+<h3><a class="section" name="a45">4.5 Exporting the Map</a></h3>
+
+<P>Now, back to the planning tool.  Now that those houses are placed, it's time to save it as a map.  Now, you could just save it with the defaults.  Selecting the doors, houses, footprints and background.  Do this and save it as "SampleMap" if you wish, but you will not be using it.  The maps you will be saving will not be anything like that.  There will be 3 of them.</P>
+<P>First, select the options, and select only the doors and background.  Change the background color to match the default structures color, or alternately whatever color you want the structures to be.  Make sure structures and footprints are not selected.  Save this map as "Structures".</P>
+<P>Next, select the structures and background.  Set the structure color to "#ffffff" and the background color to "#000000".  Save this map as "StructuresMask".</P>
+<P>Finally, select only the footprints and background.  Set the footprints to be "#000000" and the background to "#ffffff".  Including the sample, that should produce the following 4 images, reduced for the sake of brevity.</P>
+<table><tr>
+<td width=216><a target=_blank href=tutorial/SampleMap.png>SampleMap<br><img width=216 height=216 src=tutorial/SampleMap.png></a></td>
+<td width=216><a target=_blank href=tutorial/Structures.png>Structures<br><img width=216 height=216 src=tutorial/Structures.png></a></td>
+</tr><tr>
+<td width=216><a target=_blank href=tutorial/StructuresMask.png>StructuresMask<br><img width=216 height=216 src=tutorial/StructuresMask.png></a></td>
+<td width=216><a target=_blank href=tutorial/Footprints.png>Footprints<br><img width=216 height=216 src=tutorial/Footprints.png></a></td>
+</tr></table>
+<P>For convenience, instead of creating these yourself, you can just download those four graphics.  Use whatever method your browser has to save a link.</P>
+
+<h3><a class="section" name="a46">4.6 Starting Your Final Map</a></h3>
+
+<P>Before importing these, you have to create a new image.  In The Gimp's main window, select New from the File menu.  For this tutorial, set the width to 216 and the height to 216, for normal maps, both should be 1356.  The image type should be "RGB" and the Fill Type "Transparent".</P>
+<P>Now the Layers window should have your new image in it.  Deselect the "Auto" option next to the image name.  This will keep the Layers window on your new image.  Create a new layer by clicking on the left most button in the Layers window, with a page on it.  Leave everything the default, except the name.  Set the Layer Name to Footprints, and click OK.  Create another new layer, and name this one Structures.  Right click on the structures layer and select "Add Layer Mask".  Just accept the defaults and click "OK".</P>
+<P>Your Layers window should now have 3 layers listed.  On the top should be Structures, with two small pictures by it.  In the middle should be Footprints with one small picture by it.  On the bottom should be Background with one small picture by it.</P>
+
+<h3><a class="section" name="a47">4.7 Importing Your Map Into The Gimp</a></h3>
+
+<P>Now open the three files, Structures.png, Footprints.png and StructuresMask.png.  The Layers view should still have your new graphic selected.  Click on the Footprints layer.  It should change to the selected layer.  Find the Footprints.png window, and select everything.  To do this, right click, then under the Select sub-menu select All.  You can also press Ctrl-A to do this.  Now copy everything by right clicking, selecting the Edit sub-menu and selecting Copy.  You can also press Ctrl-C to do this.</P>
+<P>Close the footprints window and go back to your new image.  Paste by right clicking, selecting the Edit sub-menu and selecting Paste.  You can also press Ctrl-V to do this.  You now have a floating selection.  You can move this around, but you don't want to.  You want to anchor it where it is.  Do this by right clicking, selecting the Layers sub-menu and selecting Anchor Layer.  You can also press Ctrl-H, or in the Layers window click the anchor button.  The Footprints layer should now be mostly white with a few black dots in the Layers window, and the image should look exactly like the Footprints image.  If another layer is like that instead, you had the wrong layer selected.  Right click on the image window and under Edit, select Undo.  Do this again.  You can also press Ctrl-Z twice to do this.  Now make sure you have the Footprints layer selected and try the paste again.</P>
+<img class='tutex' src=tutorial/TUTgimpex1.png>
+<P>Next, click on the first box in the structures layer.  Go to the Structures window and follow the same steps you did for Footprints.  Select all, copy, then close the window.  Returning to your new image, paste into it, and anchor the layer.  Your image should now be green with a few dots on it.  The first box in the Structures layer should look like this as well.</P>
+<P>Finally, click on the second box in the Structures layer.  Go to the StructuresMasks image, select all, copy, and close the window.  Back in your new image, which should be the only image left open now, paste into that image.  The solid green should magically turn into a series of houses with doors on black footprints with a blinding white background.  Anchor the layer.</P>
+
+<h3><a class="section" name="a48">4.8 Adding a Grid</a></h3>
+
+<P>You've now got the basics down.  You may notice there is still an empty layer though.</P>
+<P>You are going to create a checkerboard pattern like in the city planner tool in this layer.  In the main window, double click on the foreground color to bring up the color picker.  Select a color for one of the check colors.  I picked a nice forest green like in the city planner tool.  You can use the same color I'm using by entering "#3b7a3b" into the Hex Triplet box.  Click close when you are happy with the color, then double click on the background color and pick the other check color.  I used "#2b592b".  Click Close when you are happy with this color as well.</P>
+<img class='tutex' src=tutorial/TUTgimpex2.png>
+<P>In the Layers window, select the Background layer, then return to the image view.  Now right click in the image, and near the bottom select the Filters sub-menu.  In this menu, select the Render sub-menu, then under that menu the Pattern sub-menu.  Select checkerboard.  In the options window set the Check Size to 12, then click OK.</P>
+<P>Now you may keenly observe that absolutely nothing seemed to just happen.  However, in the Layers window, the Background should now have a combination of the two colors you used.  It is not visible, however, because the Background layer is behind the Footprints layer, so the Footprints layer is hiding everything.  Fortunately, this is easily solved.  In the Layers window, select the Footprints layer.  Just above the layers list, there is a selection for Mode, which is currently Normal.  Change that to "Darken Only".  The grid will appear everywhere the white was in the Footprints view.</P>
+
+<h3><a class="section" name="a49">4.9 Adding Terrain</a></h3>
+
+<P>If you recall, I mentioned in the beginning that there was some water.  You may have some water, or other terrain you would like to represent on your map.  This is a little bit trickier to do.  This is another time you need to use that personal harvester.</P>
+<P>To prepare your map for the water, first duplicate the Background (grid) layer by selecting it and click the duplicate button.  It is the button in the Layers window with 2 pages on it.  It should be the fourth button.  The new copy should now be selected.  Right click on this layer and select "Edit Layer Attributes".  This will let you rename the layer.  Rename it to "Terrain" and click OK.  Now in the main Gimp window, double click on the foreground color, and select a nice water color.  I picked "#0000a0".  Select the bucket fill tool.  This is the icon with a paint bucket spilling in the main window.  You can also do this in the Image window by right clicking, selecting Tools, Paint Tools, Bucket Fill, or by pressing Shift-B.</P>
+<P>Next, run along the shore, or whatever terrain you wish to mark.  Every 64 meters, create a waypoint.  Starting at one end, go into the structure placement view, and make note of where the water is.  You can either take screen-shots, mark it out on graph paper, alt-tab out of SWG and mark it in The Gimp, or mark it in The Gimp on another computer (recommended), whatever works best for you.  For the sake of this tutorial, use these two screen-shots.</P>
+<img class='tutsbs' src=tutorial/TUTsp2.jpg><img class='tutsbs' src=tutorial/TUTsp3.jpg><br>
+<img class='tutex' src=tutorial/TUTgimpex3.png>
+<P>Since everything you need to mark fits within these two screen-shots, I did not create a waypoint, and instead used my location (circled) as a marker.  Note that I also used the location of the harvester placement to make distance estimation easier.</P>
+<P>In these screen-shots you can see that from the upper house, there is 5 blocks between it and the water along the top, and 6 along the bottom.  So you count out the blocks, and click on the next blocks to fill it with water.</P>
+<img class='tutex' src=tutorial/TUTgimpex4.png>
+<P>From here you can work out the rest of the water.  Directly in front of the house in the middle, the water is 6 blocks away again, in line with the lower water mark.  Fill that block.  North of there, the top most water mark extends one more block, then comes in towards the house one block for 3 more blocks.  Click on the grid location directly above the current water, then click the box up and to the left, then click the next box up, and finally the next box, which should be the top of the image.  Conveniently, this is also the top of the screen-shot.</P>
+<img class='tutex' src=tutorial/TUTgimpex5.png>
+<P>Now going down, the water goes out a block away from the house, then extends down 3 blocks.  Click to fill these in as well.  At this point you should be at the bottom of the first screen-shot.  The last square you marked was the one I was standing in.  In the other screen-shot, after this spot, the land extends another block to the east and 3 down, then another to the east and 3 down, and another to the east and two down.  Fill these in as well.  You can make sure you did this right by checking that the distance between the house and the water is the same on my map and in the screen-shot.</P>
+<img class='tutex' src=tutorial/TUTgimpex6.png>
+<P>I now have the shore mapped.  To fill in the rest, you can do it the hard way; clicking on each block, or you can do it the easy way.  What is the easy way?  Well, choose the Fuzzy Select tool.  This is the magic wand looking thing in the main window.  You can also right click on the image and under Tools/Select Tools, choose Fuzzy Select.  Pressing Z will also select this tool.  What this does is it selects regions of similar colors from the image.  To use this, click on the area that should be water but is currently land and hold down the mouse button.  You should see the block you clicked on become outlined.  If you don't see that outlined, move the mouse to the left until you see it outlined.  Now slowly move the mouse to the right until the outline extends just up to the edge of the area you marked as water.  If both sides of the water are outlined, or the outline disappears completely, move the mouse back to the left.  When the outline is just on the water side of the shore, release the button.  Now go back to the bucket fill tool and click in this area to fill it in.</P>
+<P>Using the fuzzy select tool again, click on the land side of the water.  You should not have to move the mouse at all this time, it remembers how sensitive it should be from last time you did it.  So just click and release.  Clear this area by right clicking on the image and selecting the Edit menu, then Clear under that.  Or you can press Ctrl-K.  You shouldn't see anything change in the image, however in the Layers window, the Terrain layer is now just your water color with a grey checkerboard behind it.  This grey checkerboard is how The Gimp shows something that is transparent with nothing behind it.</P>
+
+<h3><a class="section" name="a410">4.10 Finishing Touches</a></h3>
+
+<P>If you are happy with that, you're done.  You can save it as an XCF file.  This will save all the layers, so next time you don't have to recreate everything, you can just copy and paste into the layers to update the map.  You can also save it as any other format you choose.  I recommend PNG, it produces a fairly small file with no loss of quality.  I do not recommend jpeg (.jpg) because it does not handle this type of image well.  When you do this, it will tell you that PNG can't handle layers, and it wants you to merge visible layers.  Click on the Export button.</P>
+<P>However, if you would like the shoreline to look nicer, read on.  Start by creating a new layer.  Name it "Terrain Smooth".  Select the Bezier Select tool.  This is right next to the fuzzy select tool, it looks like a fountain pain drawing a curved line.  You can also use the menu, or the keyboard shortcut B.  The way this tool works is you mark points along a line, then each time you mark a point, you click, then you can drag the mouse away and it will make the line curve based on where you drag it to.  Play around with this a little to get used to how it works.  You can clear the current line by selecting a different tool, then selecting bezier select tool again.</P>
+<img class='tutex' src=tutorial/TUTgimpex7.png>
+<P>Once you are comfortable with the tool, use it to make an estimation about the shoreline.  I recommend expanding the window a little beyond the size of the map, to get a little gray area around it.  You can extend the line into this area to make sure it gets the edges.  Once you have the shoreline traced out, extend it past the image, to the right, across the height of the image, then around the other side to meet up with where you started.  When you click back where you started, you can then click inside the outlined region.  This will select that area.  Then use bucket fill to fill it in.</P>
+<P>When you fill it in, you won't see a change to the image.  However, you should see the Terrain Smooth layer get some blue in it, similar to the Terrain layer.  To make it visible, go to the Layers window and select the Terrain layer.  Below the Mode is a Opacity slider.  Move this down to around 50%.  This should show both the blocked water edge, and the smooth.</P>
+<P>That's all there is too it!  That is the city planner version of the map.  If you want one that does not have the grid and footprints, create a new layer.  For the fill type, select Background, which should still be one of your grid colors.  Name the layer Solid Background.  Click on the down arrow in the layers window until the Solid Background layer is on the bottom, at which time the down arrow will be grayed out.</P>
+
+<h3><a class="section" name="a411">4.11 Creating Different Looks</a></h3>
+
+<P>You may notice a little eye by each layer.  This controls visibility.  If you click on it, it will hide the layer.  Click again to show it.  Click on the eye by the Terrain, Footprints and Background layer.  This will give you a simpler map for when you don't care about placement.</P>
+<img class='tutsbs' src=tutorial/TUTmap.jpg>
+<img class='tutsbs' src=tutorial/TUTgimpex7.png>
+<br>
+<img class='tutsbs' src=tutorial/SampleMap.png>
+<img class='tutsbs' src=tutorial/TUTgimpex8.png>
+<P>If you would like to skip all these steps and just see what the final map looks like, you can download the XCF file <a href=tutorial/ExampleMap.xcf>here</a> and load it into The Gimp for browsing, and comparing to your own work.</P>

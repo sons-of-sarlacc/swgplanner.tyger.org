@@ -1,0 +1,81 @@
+/*
+ * Code and graphics Copyright &copy; Steven Lang, 2004
+ * Unauthorized use or distribution strictly forbidden
+ * Contact Tiaga on SWG Station forum for more details
+ */
+
+body {
+	background-color: #003848;
+	color: #ffffff;
+	border: 3px solid #00c0c0;
+	margin: 1px;
+	padding: 6px;
+	padding-top: 0px;
+}
+table {
+	border: 0px;
+	border-top: 1px solid #00a0a0;
+	border-left: 1px solid #00a0a0;
+	margin-top: 6px;
+	padding: 0px;
+}
+td {
+	width: 6.5em;
+	height: 1em;
+	margin: 0px;
+	padding: 2px;
+	border: 0px;
+	border-bottom: 1px solid #00a0a0;
+	border-right: 1px solid #00a0a0;
+}
+.checkbox {
+/*	background-color: #003848;	*/
+/*	color: #a0e0e0;				*/
+/*	border: 1px solid #a0e0e0;	*/
+/*	margin-left: 2px;			*/
+/*	margin-right: 4px;			*/
+	float: left;
+}
+.text {
+	width: 7.8em;
+	background-color: #002030;
+	border: 1px #008090 solid;
+	color: #ffffff;
+}
+.numinput {
+	width: 3.5em;
+	margin-left: 2em;
+	margin-right: 2em;
+	background-color: #002030;
+	border: 1px #008090 solid;
+	color: #ffffff;
+}
+.disablenuminput {
+	width: 5.5em;
+	background-color: #002030;
+	border: 1px #008090 solid;
+	color: #ffffff;
+	float: right;
+}
+.button {
+	width: 7.5em;
+	border: 2px solid #00a0a0;
+	margin: 2px;
+	background-color: #003848;
+	color: #a0e0e0;
+}
+.select {
+	width: 5.5em;
+	border: 2px solid #00a0a0;
+	margin: 2px;
+	margin-left: 1em;
+	margin-right: 1em;
+	background-color: #003848;
+	color: #ffffff;
+}
+.label {
+	color: #00a0a0;
+}
+.stats {
+	color: #00a0a0;
+}

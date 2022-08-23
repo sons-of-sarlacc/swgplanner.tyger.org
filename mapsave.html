@@ -1,0 +1,114 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html><head>
+
+<!-- Code and graphics Copyright &copy; Steven Lang, 2004 -->
+<!-- Unauthorized use or distribution strictly forbidden -->
+<!-- Contact Tiaga on SWG Station forum for more details -->
+
+<meta http-equiv="Content-Script-Type" content="JavaScript">
+<title>SWG City Map Maker</title>
+<script language="JavaScript"><!--
+
+function TK_CopyForm ()
+{
+	if (!window.opener || !window.opener.document.options) return;
+
+	if (document.TK_FakeStructureList)
+		document.options.structurelist.value = window.opener.document.options.structurelist.value;
+	else
+		document.options.structurelist.value = window.opener.document.options.fakestructurelist.value;
+	if (window.opener.document.options.doorcolorcheck.checked)
+		document.options.doorcolorcheck.value = '1';
+	else
+		document.options.doorcolorcheck.value = '0';
+	if (window.opener.document.options.housecolorcheck.checked)
+		document.options.housecolorcheck.value = '1';
+	else
+		document.options.housecolorcheck.value = '0';
+	if (window.opener.document.options.footprintcolorcheck.checked)
+		document.options.footprintcolorcheck.value = '1';
+	else
+		document.options.footprintcolorcheck.value = '0';
+	if (window.opener.document.options.backgroundcolorcheck.checked)
+		document.options.backgroundcolorcheck.value = '1';
+	else
+		document.options.backgroundcolorcheck.value = '0';
+	document.options.doorcolor.value = window.opener.document.options.doorcolor.value;
+	document.options.housecolor.value = window.opener.document.options.housecolor.value;
+	document.options.footprintcolor.value = window.opener.document.options.footprintcolor.value;
+	document.options.backgroundcolor.value = window.opener.document.options.backgroundcolor.value;
+	document.options.width.value = window.opener.document.options.width.value;
+	document.options.height.value = window.opener.document.options.height.value;
+	document.options.centerx.value = window.opener.document.citycenter.centerx.value;
+	document.options.centery.value = window.opener.document.citycenter.centery.value;
+}
+
+function TK_CheckFileName (form)
+{
+	if (!form.filename.value || form.filename.value == '') {
+		alert ('Please enter a file name');
+		return false;
+	}
+
+	TK_CopyForm ();
+
+	if (form.filename.value.indexOf ('.') < 0)
+		form.filename.value += '.' + form[document.TK_FormatSource].value;
+
+	return true;
+}
+
+function TK_SaveAsImage ()
+{
+	document.options.action = "/cgi-bin/mapmaker";
+	document.options.htmlformat.style.display = "none";
+	document.options.format.style.display = "";
+	document.TK_FakeStructureList = 1;
+        document.TK_FormatSource = "format";
+}
+
+function TK_SaveAsHTML ()
+{
+	document.options.action = "/cgi-bin/mapsaver";
+	document.options.htmlformat.style.display = "";
+	document.options.format.style.display = "none";
+	document.TK_FakeStructureList = 0;
+        document.TK_FormatSource = "htmlformat";
+}
+
+--></script>
+</head>
+<body bgcolor="#939393" onload="TK_SaveAsImage();TK_CopyForm ();">
+<form name="options" action="/cgi-bin/mapmaker" method="post" onsubmit="return TK_CheckFileName (this);">
+Filename <input type=text name="filename">
+<select size=1 name="format">
+<option selected label=".png" value="png">.png
+<option label=".gif" value="gif">.gif
+</select>
+<select size=1 disabled style="display: none" name="htmlformat">
+<option selected label=".html" value="html">.html
+</select>
+<br>
+<table><tr>
+<td><input type=radio onclick="TK_SaveAsImage();" checked name="saveastype" value=2>Image</td>
+<td><input type=radio onclick="TK_SaveAsHTML();" name="saveastype" value=1>Editable</td>
+<td><input type=radio onclick="TK_SaveAsHTML();" name="saveastype" value=0>Viewable</td>
+</tr></table>
+<input type="submit" value="Save Map">
+<input type=hidden name="structurelist">
+<input type=hidden name="doorcolorcheck">
+<input type=hidden name="doorcolor">
+<input type=hidden name="housecolorcheck">
+<input type=hidden name="housecolor">
+<input type=hidden name="footprintcolorcheck">
+<input type=hidden name="footprintcolor">
+<input type=hidden name="backgroundcolorcheck">
+<input type=hidden name="backgroundcolor">
+<input type=hidden name="width">
+<input type=hidden name="height">
+<input type=hidden name="centerx">
+<input type=hidden name="centery">
+</form>
+<a href="javascript:window.close ();">Close Window</a>
+</body>
+</html>
